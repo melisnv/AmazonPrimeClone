@@ -2,16 +2,25 @@ package com.melisnurverir.amazonprimeclone.model;
 
 public class BannerMovies {
 
+    Integer bannerCategoryId;
     Integer id;
     String movieName;
     String imageUrl;
     String fileUrl;
 
-    public BannerMovies(Integer id, String movieName, String imageUrl, String fileUrl) {
+    /*public BannerMovies(Integer id, String movieName, String imageUrl, String fileUrl) {
         this.id = id;
         this.movieName = movieName;
         this.imageUrl = imageUrl;
         this.fileUrl = fileUrl;
+    }*/
+
+    public Integer getBannerCategoryId() {
+        return bannerCategoryId;
+    }
+
+    public void setBannerCategoryId(Integer bannerCategoryId) {
+        this.bannerCategoryId = bannerCategoryId;
     }
 
     public Integer getId() {

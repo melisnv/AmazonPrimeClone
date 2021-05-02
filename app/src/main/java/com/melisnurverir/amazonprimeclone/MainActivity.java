@@ -7,9 +7,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.LinearLayout;
-import android.widget.Toolbar;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
@@ -18,11 +17,18 @@ import com.melisnurverir.amazonprimeclone.adapter.MainRecyclerAdapter;
 import com.melisnurverir.amazonprimeclone.model.AllCategory;
 import com.melisnurverir.amazonprimeclone.model.BannerMovies;
 import com.melisnurverir.amazonprimeclone.model.CategoryItem;
+import com.melisnurverir.amazonprimeclone.retrofit.RetrofitClient;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.annotations.NonNull;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.observers.DisposableObserver;
+import io.reactivex.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
         appBarLayout = findViewById(R.id.appbar);
 
         homeBannerList = new ArrayList<>();
-        homeBannerList.add(new BannerMovies(1,"Friends",
+        /*homeBannerList.add(new BannerMovies(1,"Friends",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/homebanner1.png?alt=media&token=d34c1ced-602a-4275-877e-d60dbdcc1124","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         homeBannerList.add(new BannerMovies(2,"Harry Potter",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/homebanner2.png?alt=media&token=57058baf-b5d1-4815-9f34-0f744f2413b6","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
@@ -63,10 +69,10 @@ public class MainActivity extends AppCompatActivity {
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/homebanner4.png?alt=media&token=817fe031-41ae-44fb-a49c-f48f64d971c9","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         homeBannerList.add(new BannerMovies(5,"Peaky Blinders",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/homebanner5.png?alt=media&token=9f5ebeca-71f1-4141-9248-5d6041dbc502","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
-
+        */
 
         tvShowBannerList = new ArrayList<>();
-        tvShowBannerList.add(new BannerMovies(1,"Bridgerton",
+        /*tvShowBannerList.add(new BannerMovies(1,"Bridgerton",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/tvshowbanner1.png?alt=media&token=e7e5c210-3591-4208-a381-5d431f9f1518","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         tvShowBannerList.add(new BannerMovies(2,"The Crown",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/tvshowbanner2.png?alt=media&token=d44c97a0-92af-4fd2-8e59-bb2e1a6b8cd4","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
@@ -74,10 +80,10 @@ public class MainActivity extends AppCompatActivity {
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/tvshowbanner3.png?alt=media&token=60e48a9c-5a47-48a4-afd1-25e1e48f529f","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         tvShowBannerList.add(new BannerMovies(4,"Unorthodox",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/tvshowbanner4.png?alt=media&token=d71da06f-6735-4c93-a5d5-7baf7961cf4c","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
-
+        */
 
         kidsBannerList = new ArrayList<>();
-        kidsBannerList.add(new BannerMovies(1,"Carmen Sandiego",
+        /*kidsBannerList.add(new BannerMovies(1,"Carmen Sandiego",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/kidsbanner1.png?alt=media&token=bfc058d8-7c28-41f1-8616-c4b9d2e977be","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         kidsBannerList.add(new BannerMovies(2,"Smurfs : Lost Village",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/kidsbanner2.png?alt=media&token=8a4c9665-31e0-4ba2-954e-b97355982c1d","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
@@ -87,18 +93,19 @@ public class MainActivity extends AppCompatActivity {
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/kidsbanner4.png?alt=media&token=489d0035-ac00-49da-b713-a7a27b43ad7d","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         kidsBannerList.add(new BannerMovies(5,"Full Out 2",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/kidsbanner5.png?alt=media&token=f6b96d4a-7e36-4151-848c-18e59b506a4b","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
-
-
+                */
 
         movieBannerList = new ArrayList<>();
-        movieBannerList.add(new BannerMovies(1,"Enola Holmes",
+        /*movieBannerList.add(new BannerMovies(1,"Enola Holmes",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/moviebanner1.png?alt=media&token=5a972f9d-4222-4a76-836e-944a7f39e699","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         movieBannerList.add(new BannerMovies(2,"The Great Gatsby",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/moviebanner2.png?alt=media&token=9ec35e86-3f7e-437d-a025-84b7053b1229","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         movieBannerList.add(new BannerMovies(3,"Interstellar",
                 "https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/moviebanner3.png?alt=media&token=f95a84b8-02de-4e0f-be4a-0251eaf5f1bc","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
+        */
 
-        setBannerMoviesPagerAdapter(homeBannerList); // default selected tab
+        // fetch the banner data from the server
+        getBannerData();
 
         // tab change data
         categoryTab.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
@@ -162,23 +169,11 @@ public class MainActivity extends AppCompatActivity {
         homeCatListItem4.add(new CategoryItem(4,"The Revenant","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/therevenant.png?alt=media&token=a39a92e7-e924-46ff-b0f6-224a033bf28c","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
         homeCatListItem4.add(new CategoryItem(5,"The Young Pope","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/youngpope.png?alt=media&token=a5ee6ba1-3310-41a6-9062-297e3f09890a","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/handmaidstale.mp4?alt=media&token=8838e423-5448-4749-9191-3816304fe582"));
 
-        /*List<CategoryItem> homeCatListItem5 = new ArrayList<>();
-        homeCatListItem5.add(new CategoryItem(1,"Phillipines","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/phillippines.png?alt=media&token=58f90831-9003-4db2-b842-f87665fca2e4",""));
-        homeCatListItem5.add(new CategoryItem(2,"Cryptometer","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/cryptometer.png?alt=media&token=99152ff5-ea2b-4b99-b3f0-9c33c7667760",""));
-        homeCatListItem5.add(new CategoryItem(3,"Digital Flirting","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/digitalflirting.png?alt=media&token=903ce01f-c995-4412-8925-bc60ea97c754",""));
-        homeCatListItem5.add(new CategoryItem(4,"Bize Gezmek Olsun","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/bizegezmekolsun.png?alt=media&token=0a147734-0d05-4a3b-aba8-2489645f4fd4",""));
-        homeCatListItem5.add(new CategoryItem(5,"My Art","https://firebasestorage.googleapis.com/v0/b/primeclone-e8a29.appspot.com/o/myart.png?alt=media&token=a9c95711-c673-4ec4-b778-741a98ab1cc0",""));
-        */
-
-
         allCategoryList = new ArrayList<>();
         allCategoryList.add(new AllCategory(1,"Watch next Tv and Movies",homeCatListItem1));
         allCategoryList.add(new AllCategory(2,"Indie Movies",homeCatListItem2));
         allCategoryList.add(new AllCategory(3,"Kids and Family Movies",homeCatListItem3));
         allCategoryList.add(new AllCategory(4,"Amazon Original Series",homeCatListItem4));
-        //allCategoryList.add(new AllCategory(5,"Documentaries",homeCatListItem5));
-
-
 
         setMainRecycler(allCategoryList);
     }
@@ -228,4 +223,55 @@ public class MainActivity extends AppCompatActivity {
         appBarLayout.setExpanded(true);
     }
 
+    private void getBannerData(){
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(RetrofitClient.getRetrofitClient().getAllBanners()
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribeWith(new DisposableObserver<List<BannerMovies>>() {
+                                @Override
+                                public void onNext(@NonNull List<BannerMovies> bannerMovies) {
+                                    for(int i = 0; i < bannerMovies.size(); i++){
+                                        if(bannerMovies.get(i).getBannerCategoryId().toString().equals("1")){
+                                            homeBannerList.add(bannerMovies.get(i));
+                                        }
+                                        else if (bannerMovies.get(i).getBannerCategoryId().toString().equals("2")){
+                                            tvShowBannerList.add(bannerMovies.get(i));
+                                        }
+                                        else if(bannerMovies.get(i).getBannerCategoryId().toString().equals("3")){
+                                            movieBannerList.add(bannerMovies.get(i));
+                                        }
+                                        else if(bannerMovies.get(i).getBannerCategoryId().toString().equals("4")){
+                                            kidsBannerList.add(bannerMovies.get(i));
+                                        }
+                                        else {}
+                                    }
+                                }
+
+                                @Override
+                                public void onError(@NonNull Throwable e) {
+                                    Log.d("bannerData","" + e);
+                                }
+
+                                @Override
+                                public void onComplete() {
+                                    // the default tab that already selected
+                                    setBannerMoviesPagerAdapter(homeBannerList);
+                                }
+                            })
+        );
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
